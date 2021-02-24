@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ddymko/vultr-b-gone/cmd/instances"
+	"github.com/ddymko/vultr-b-gone/cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -14,8 +16,8 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	subs := &SubscriptionScheme{}
-	rootCmd.AddCommand(NewCmdInstance(subs))
+	config := setup()
+	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(NewCmdSnapshot())
 }
 
@@ -25,4 +27,8 @@ func Execute() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+func setup() *util.VultrBGone {
+	return  util.NewVultrBGone()
 }

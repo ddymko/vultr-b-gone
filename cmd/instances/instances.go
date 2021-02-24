@@ -1,9 +1,13 @@
-package cmd
+package instances
 
 import (
+	"context"
 	"fmt"
+	"sync"
+
+	"github.com/ddymko/vultr-b-gone/cmd/util"
 	"github.com/spf13/cobra"
-	"os"
+	"github.com/vultr/govultr/v2"
 )
 
 var (
@@ -21,46 +25,20 @@ var (
 `
 )
 
-func newInstance(cobra *cobra.Command, instance *SubscriptionScheme) (*SubscriptionScheme, error) {
-	method, err := cobra.Flags().GetString("method")
-	if err != nil {
-		return nil, err
-	}
-
-	regions, err := cobra.Flags().GetStringSlice("regions")
-	if err != nil {
-		return nil, err
-	}
-
-	omitRegions, err := cobra.Flags().GetStringSlice("omit-regions")
-	if err != nil {
-		return nil, err
-	}
-
-	instance.Regions = regions
-	instance.Method = method
-	instance.OmitRegions = omitRegions
-
-	return instance, nil
-}
-
 // NewCmdInstance returns the instance cobra command
-func NewCmdInstance(instance *SubscriptionScheme) *cobra.Command {
+func NewCmdInstance(config *util.VultrBGone) *cobra.Command {
+	options := &util.OptionsScheme{}
+
 	command := &cobra.Command{
 		Use:     "instances",
 		Short:   "delete instances",
 		Long:    instanceLong,
 		Example: instanceExample,
-		Args: func(cmd *cobra.Command, args []string) error {
-			instance, _ = newInstance(cmd, instance)
-			return nil
-		},
 		Run: func(cmd *cobra.Command, args []string) {
-			if err := instance.Validate(); err != nil {
-				fmt.Println(err.Error())
-				os.Exit(1)
-			}
-			run(instance)
+			util.CheckError(options.SetOptions(cmd))
+			util.CheckError(options.Validate())
+			config.Options = options
+			run(config)
 		},
 	}
 
@@ -68,15 +46,44 @@ func NewCmdInstance(instance *SubscriptionScheme) *cobra.Command {
 	if err := command.MarkFlagRequired("method"); err != nil {
 		panic(err.Error())
 	}
-
 	command.Flags().StringSliceP("regions", "r", []string{}, "list of region(s) that instances will be deleted from. Must be provided with `method` of `region`")
 	command.Flags().StringSliceP("omit-regions", "o", []string{}, "list of region(s) that instances will be omitted from deletion. Must be provided with `method` of `region`")
 
 	return command
 }
 
-func run(instance *SubscriptionScheme) {
-	fmt.Println(instance.Method)
-	fmt.Println(instance.OmitRegions)
-	fmt.Println(instance.Regions)
+func run(config *util.VultrBGone) {
+	listOptions := &govultr.ListOptions{PerPage: 100}
+	wg := sync.WaitGroup{}
+	for {
+		i, meta, err := config.Config.Instance.List(context.Background(), listOptions)
+		if err != nil {
+			_ = fmt.Errorf("error retrieving list %s", err.Error())
+			return
+		}
+		wg.Add(len(i))
+
+		for _, v := range i {
+			go func(v govultr.Instance) {
+				if util.LocationCheck(v.Region) {
+					if err := config.Config.Instance.Delete(context.Background(), v.ID); err != nil {
+						fmt.Println("error : ", err.Error())
+						defer wg.Done()
+						return
+					}
+					fmt.Println("deleted: ", v.ID, " region: ", v.Region)
+					defer wg.Done()
+					return
+				}
+				defer wg.Done()
+			}(v)
+		}
+		if meta.Links.Next == "" {
+			break
+		} else {
+			listOptions.Cursor = meta.Links.Next
+			continue
+		}
+	}
+	wg.Wait()
 }
