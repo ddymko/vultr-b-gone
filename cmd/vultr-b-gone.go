@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
 	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
 	"os"
@@ -19,6 +20,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	config := setup()
+	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config))
 	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
@@ -34,5 +36,5 @@ func Execute() {
 }
 
 func setup() *util.VultrBGone {
-	return  util.NewVultrBGone()
+	return util.NewVultrBGone()
 }
