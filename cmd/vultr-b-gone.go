@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"os"
 
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
@@ -17,6 +18,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	config := setup()
+	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(NewCmdSnapshot())
 }
