@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
-	"github.com/ddymko/vultr-b-gone/cmd/blocks"
-	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
-	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"os"
 
+	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
+	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
+	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
+	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"github.com/ddymko/vultr-b-gone/cmd/util"
 	"github.com/spf13/cobra"
 )
