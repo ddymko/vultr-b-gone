@@ -19,21 +19,20 @@ var (
 )
 
 // NewCmdFirewall returns the instance cobra command
-func NewCmdFirewall(config *util.VultrBGone) *cobra.Command {
+func NewCmdFirewall(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	return &cobra.Command{
 		Use:     "firewalls",
 		Short:   "delete firewalls",
 		Long:    firewallLong,
 		Example: firewallExample,
 		Run: func(cmd *cobra.Command, args []string) {
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
 	for {
 		i, meta, err := config.Config.FirewallGroup.List(context.Background(), listOptions)
 		if err != nil {

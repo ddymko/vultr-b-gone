@@ -19,21 +19,20 @@ var (
 )
 
 // NewCmdUser returns the instance cobra command
-func NewCmdUser(config *util.VultrBGone) *cobra.Command {
+func NewCmdUser(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	return &cobra.Command{
 		Use:     "users",
 		Short:   "delete users",
 		Long:    userLong,
 		Example: userExample,
 		Run: func(cmd *cobra.Command, args []string) {
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
 	for {
 		i, meta, err := config.Config.User.List(context.Background(), listOptions)
 		if err != nil {

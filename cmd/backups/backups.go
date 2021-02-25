@@ -19,21 +19,20 @@ var (
 )
 
 // NewCmdBackup returns the instance cobra command
-func NewCmdBackup(config *util.VultrBGone) *cobra.Command {
+func NewCmdBackup(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	return &cobra.Command{
 		Use:     "backups",
 		Short:   "delete backups",
 		Long:    backupLong,
 		Example: backupExample,
 		Run: func(cmd *cobra.Command, args []string) {
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
 	for {
 		i, meta, err := config.Config.Backup.List(context.Background(), listOptions)
 		if err != nil {
