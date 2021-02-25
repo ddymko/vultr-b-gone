@@ -38,7 +38,7 @@ func init() {
 	rootCmd.AddCommand(backups.NewCmdBackup(config, wg))
 	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config, wg))
 	rootCmd.AddCommand(blocks.NewCmdBlock(config, wg))
-	rootCmd.AddCommand(domains.NewCmdDomain(config,wg))
+	rootCmd.AddCommand(domains.NewCmdDomain(config, wg))
 	rootCmd.AddCommand(firewalls.NewCmdFirewall(config, wg))
 	rootCmd.AddCommand(instances.NewCmdInstance(config, wg))
 	rootCmd.AddCommand(isos.NewCmdISO(config, wg))

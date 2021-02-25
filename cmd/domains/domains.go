@@ -35,7 +35,7 @@ func NewCmdDomain(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Co
 
 func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-		for {
+	for {
 		i, meta, err := config.Config.Domain.List(context.Background(), listOptions)
 		if err != nil {
 			_ = fmt.Errorf("error retrieving list %s", err.Error())

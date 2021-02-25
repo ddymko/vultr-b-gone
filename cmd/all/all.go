@@ -29,7 +29,7 @@ var (
 )
 
 // NewCmdBackup returns the instance cobra command
-func NewCmdAll(config *util.VultrBGone, parentWait *sync.WaitGroup, ) *cobra.Command {
+func NewCmdAll(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	return &cobra.Command{
 		Use:     "all",
 		Short:   "delete everything",

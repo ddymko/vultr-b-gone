@@ -54,7 +54,7 @@ func NewCmdBareMetal(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra
 
 func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-		for {
+	for {
 		i, meta, err := config.Config.BareMetalServer.List(context.Background(), listOptions)
 		if err != nil {
 			_ = fmt.Errorf("error retrieving list %s", err.Error())
