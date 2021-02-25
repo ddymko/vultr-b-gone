@@ -25,8 +25,8 @@ var (
 `
 )
 
-// NewCmdObjects returns the instance cobra command
-func NewCmdObjects(config *util.VultrBGone) *cobra.Command {
+// NewCmdObject returns the instance cobra command
+func NewCmdObject(config *util.VultrBGone) *cobra.Command {
 	options := &util.OptionsScheme{}
 
 	command := &cobra.Command{
