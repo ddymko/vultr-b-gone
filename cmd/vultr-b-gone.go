@@ -5,6 +5,7 @@ import (
 	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
 	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
+	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"os"
 
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
@@ -24,6 +25,7 @@ func init() {
 	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
+	rootCmd.AddCommand(objects.NewCmdObjects(config))
 	rootCmd.AddCommand(NewCmdSnapshot())
 }
 
