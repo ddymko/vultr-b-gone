@@ -10,11 +10,15 @@ import (
 	"github.com/ddymko/vultr-b-gone/cmd/domains"
 	"github.com/ddymko/vultr-b-gone/cmd/firewalls"
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
+	"github.com/ddymko/vultr-b-gone/cmd/isos"
 	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
 	"github.com/ddymko/vultr-b-gone/cmd/networks"
 	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"github.com/ddymko/vultr-b-gone/cmd/reservedips"
+	"github.com/ddymko/vultr-b-gone/cmd/scripts"
 	"github.com/ddymko/vultr-b-gone/cmd/snapshots"
+	"github.com/ddymko/vultr-b-gone/cmd/sshkeys"
+	"github.com/ddymko/vultr-b-gone/cmd/users"
 	"github.com/ddymko/vultr-b-gone/cmd/util"
 	"github.com/spf13/cobra"
 )
@@ -33,12 +37,15 @@ func init() {
 	rootCmd.AddCommand(domains.NewCmdDomain(config))
 	rootCmd.AddCommand(firewalls.NewCmdFirewall(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
+	rootCmd.AddCommand(isos.NewCmdISO(config))
 	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
 	rootCmd.AddCommand(networks.NewCmdNetwork(config))
 	rootCmd.AddCommand(objects.NewCmdObject(config))
 	rootCmd.AddCommand(reservedips.NewCmdReservedIP(config))
+	rootCmd.AddCommand(scripts.NewCmdScript(config))
 	rootCmd.AddCommand(snapshots.NewCmdSnapshot(config))
-	rootCmd.AddCommand(NewCmdSnapshot())
+	rootCmd.AddCommand(sshkeys.NewCmdSSHKey(config))
+	rootCmd.AddCommand(users.NewCmdUser(config))
 }
 
 // Execute
