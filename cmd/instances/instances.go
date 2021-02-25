@@ -66,6 +66,7 @@ func run(config *util.VultrBGone) {
 		for _, v := range i {
 			go func(v govultr.Instance) {
 				if util.LocationCheck(v.Region) {
+					//todo detach private network prior to deletion
 					if err := config.Config.Instance.Delete(context.Background(), v.ID); err != nil {
 						fmt.Println("error : ", err.Error())
 						defer wg.Done()

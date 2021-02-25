@@ -8,6 +8,7 @@ import (
 	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
 	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
+	"github.com/ddymko/vultr-b-gone/cmd/networks"
 	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"github.com/ddymko/vultr-b-gone/cmd/reservedips"
 	"github.com/ddymko/vultr-b-gone/cmd/util"
@@ -26,6 +27,7 @@ func init() {
 	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
+	rootCmd.AddCommand(networks.NewCmdNetwork(config))
 	rootCmd.AddCommand(objects.NewCmdObject(config))
 	rootCmd.AddCommand(reservedips.NewCmdReservedIP(config))
 	rootCmd.AddCommand(NewCmdSnapshot())
