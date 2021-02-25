@@ -7,6 +7,7 @@ import (
 	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
 	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/domains"
+	"github.com/ddymko/vultr-b-gone/cmd/firewalls"
 	"github.com/ddymko/vultr-b-gone/cmd/instances"
 	"github.com/ddymko/vultr-b-gone/cmd/loadbalancers"
 	"github.com/ddymko/vultr-b-gone/cmd/networks"
@@ -27,6 +28,7 @@ func init() {
 	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config))
 	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(domains.NewCmdDomain(config))
+	rootCmd.AddCommand(firewalls.NewCmdFirewall(config))
 	rootCmd.AddCommand(instances.NewCmdInstance(config))
 	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
 	rootCmd.AddCommand(networks.NewCmdNetwork(config))
