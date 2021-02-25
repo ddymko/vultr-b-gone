@@ -26,7 +26,7 @@ var (
 )
 
 // NewCmdBareMetal returns the instance cobra command
-func NewCmdBareMetal(config *util.VultrBGone) *cobra.Command {
+func NewCmdBareMetal(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	options := &util.OptionsScheme{}
 
 	command := &cobra.Command{
@@ -38,7 +38,7 @@ func NewCmdBareMetal(config *util.VultrBGone) *cobra.Command {
 			util.CheckError(options.SetOptions(cmd))
 			util.CheckError(options.Validate())
 			config.Options = options
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 
@@ -52,10 +52,9 @@ func NewCmdBareMetal(config *util.VultrBGone) *cobra.Command {
 	return command
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
-	for {
+		for {
 		i, meta, err := config.Config.BareMetalServer.List(context.Background(), listOptions)
 		if err != nil {
 			_ = fmt.Errorf("error retrieving list %s", err.Error())

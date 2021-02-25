@@ -19,22 +19,21 @@ var (
 )
 
 // NewCmdSSHKey returns the instance cobra command
-func NewCmdSSHKey(config *util.VultrBGone) *cobra.Command {
+func NewCmdSSHKey(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	return &cobra.Command{
 		Use:     "sshkeys",
 		Short:   "delete sshkeys",
 		Long:    sshkeyLong,
 		Example: sshkeyExample,
 		Run: func(cmd *cobra.Command, args []string) {
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
-	for {
+		for {
 		i, meta, err := config.Config.SSHKey.List(context.Background(), listOptions)
 		if err != nil {
 			_ = fmt.Errorf("error retrieving list %s", err.Error())

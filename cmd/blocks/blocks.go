@@ -26,7 +26,7 @@ var (
 )
 
 // NewCmdBlock returns the blocks cobra command
-func NewCmdBlock(config *util.VultrBGone) *cobra.Command {
+func NewCmdBlock(config *util.VultrBGone, parentWait *sync.WaitGroup) *cobra.Command {
 	options := &util.OptionsScheme{}
 
 	command := &cobra.Command{
@@ -38,7 +38,7 @@ func NewCmdBlock(config *util.VultrBGone) *cobra.Command {
 			util.CheckError(options.SetOptions(cmd))
 			util.CheckError(options.Validate())
 			config.Options = options
-			run(config)
+			Run(config, parentWait)
 		},
 	}
 
@@ -52,9 +52,8 @@ func NewCmdBlock(config *util.VultrBGone) *cobra.Command {
 	return command
 }
 
-func run(config *util.VultrBGone) {
+func Run(config *util.VultrBGone, wg *sync.WaitGroup) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
-	wg := sync.WaitGroup{}
 	for {
 		i, meta, err := config.Config.BlockStorage.List(context.Background(), listOptions)
 		if err != nil {

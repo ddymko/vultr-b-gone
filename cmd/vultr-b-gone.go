@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/ddymko/vultr-b-gone/cmd/all"
 	"os"
+	"sync"
 
 	"github.com/ddymko/vultr-b-gone/cmd/backups"
 	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
@@ -31,21 +33,23 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	config := setup()
-	rootCmd.AddCommand(backups.NewCmdBackup(config))
-	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config))
-	rootCmd.AddCommand(blocks.NewCmdBlock(config))
-	rootCmd.AddCommand(domains.NewCmdDomain(config))
-	rootCmd.AddCommand(firewalls.NewCmdFirewall(config))
-	rootCmd.AddCommand(instances.NewCmdInstance(config))
-	rootCmd.AddCommand(isos.NewCmdISO(config))
-	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config))
-	rootCmd.AddCommand(networks.NewCmdNetwork(config))
-	rootCmd.AddCommand(objects.NewCmdObject(config))
-	rootCmd.AddCommand(reservedips.NewCmdReservedIP(config))
-	rootCmd.AddCommand(scripts.NewCmdScript(config))
-	rootCmd.AddCommand(snapshots.NewCmdSnapshot(config))
-	rootCmd.AddCommand(sshkeys.NewCmdSSHKey(config))
-	rootCmd.AddCommand(users.NewCmdUser(config))
+	wg := &sync.WaitGroup{}
+	rootCmd.AddCommand(all.NewCmdAll(config, wg))
+	rootCmd.AddCommand(backups.NewCmdBackup(config, wg))
+	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config, wg))
+	rootCmd.AddCommand(blocks.NewCmdBlock(config, wg))
+	rootCmd.AddCommand(domains.NewCmdDomain(config,wg))
+	rootCmd.AddCommand(firewalls.NewCmdFirewall(config, wg))
+	rootCmd.AddCommand(instances.NewCmdInstance(config, wg))
+	rootCmd.AddCommand(isos.NewCmdISO(config, wg))
+	rootCmd.AddCommand(loadbalancers.NewCmdLoadBalancer(config, wg))
+	rootCmd.AddCommand(networks.NewCmdNetwork(config, wg))
+	rootCmd.AddCommand(objects.NewCmdObject(config, wg))
+	rootCmd.AddCommand(reservedips.NewCmdReservedIP(config, wg))
+	rootCmd.AddCommand(scripts.NewCmdScript(config, wg))
+	rootCmd.AddCommand(snapshots.NewCmdSnapshot(config, wg))
+	rootCmd.AddCommand(sshkeys.NewCmdSSHKey(config, wg))
+	rootCmd.AddCommand(users.NewCmdUser(config, wg))
 }
 
 // Execute
