@@ -71,7 +71,7 @@ func run(config *util.VultrBGone) {
 						defer wg.Done()
 						return
 					}
-					fmt.Println("deleted instance:", v.NetworkID, " region:", v.Region)
+					fmt.Println("deleted network:", v.NetworkID, " region:", v.Region)
 					defer wg.Done()
 					return
 				}
