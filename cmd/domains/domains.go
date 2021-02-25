@@ -46,14 +46,14 @@ func run(config *util.VultrBGone) {
 
 		for _, v := range i {
 			go func(v govultr.Domain) {
-					if err := config.Config.Domain.Delete(context.Background(), v.Domain); err != nil {
-						fmt.Println("error : ", err.Error())
-						defer wg.Done()
-						return
-					}
-					fmt.Println("deleted domain:", v.Domain)
+				if err := config.Config.Domain.Delete(context.Background(), v.Domain); err != nil {
+					fmt.Println("error : ", err.Error())
 					defer wg.Done()
 					return
+				}
+				fmt.Println("deleted domain:", v.Domain)
+				defer wg.Done()
+				return
 
 			}(v)
 		}

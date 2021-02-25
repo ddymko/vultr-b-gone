@@ -1,6 +1,5 @@
 package blocks
 
-
 import (
 	"context"
 	"fmt"
