@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ddymko/vultr-b-gone/cmd/backups"
 	"github.com/ddymko/vultr-b-gone/cmd/baremetals"
 	"github.com/ddymko/vultr-b-gone/cmd/blocks"
 	"github.com/ddymko/vultr-b-gone/cmd/domains"
@@ -13,6 +14,7 @@ import (
 	"github.com/ddymko/vultr-b-gone/cmd/networks"
 	"github.com/ddymko/vultr-b-gone/cmd/objects"
 	"github.com/ddymko/vultr-b-gone/cmd/reservedips"
+	"github.com/ddymko/vultr-b-gone/cmd/snapshots"
 	"github.com/ddymko/vultr-b-gone/cmd/util"
 	"github.com/spf13/cobra"
 )
@@ -25,6 +27,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	config := setup()
+	rootCmd.AddCommand(backups.NewCmdBackup(config))
 	rootCmd.AddCommand(baremetals.NewCmdBareMetal(config))
 	rootCmd.AddCommand(blocks.NewCmdBlock(config))
 	rootCmd.AddCommand(domains.NewCmdDomain(config))
@@ -34,6 +37,7 @@ func init() {
 	rootCmd.AddCommand(networks.NewCmdNetwork(config))
 	rootCmd.AddCommand(objects.NewCmdObject(config))
 	rootCmd.AddCommand(reservedips.NewCmdReservedIP(config))
+	rootCmd.AddCommand(snapshots.NewCmdSnapshot(config))
 	rootCmd.AddCommand(NewCmdSnapshot())
 }
 

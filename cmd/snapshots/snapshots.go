@@ -1,4 +1,4 @@
-package firewalls
+package snapshots
 
 import (
 	"context"
@@ -11,20 +11,20 @@ import (
 )
 
 var (
-	firewallLong    = `This will delete firewalls on your account.`
-	firewallExample = `
-	# To delete all firewalls on your account
-	$ vultr-b-gone firewalls
+	snapshotLong    = `This will delete snapshots on your account.`
+	snapshotExample = `
+	# To delete all snapshots on your account
+	$ vultr-b-gone snapshots
 `
 )
 
-// NewCmdFirewall returns the instance cobra command
-func NewCmdFirewall(config *util.VultrBGone) *cobra.Command {
+// NewCmdSnapshot returns the instance cobra command
+func NewCmdSnapshot(config *util.VultrBGone) *cobra.Command {
 	return &cobra.Command{
-		Use:     "firewalls",
-		Short:   "delete firewalls",
-		Long:    firewallLong,
-		Example: firewallExample,
+		Use:     "snapshots",
+		Short:   "delete snapshots",
+		Long:    snapshotLong,
+		Example: snapshotExample,
 		Run: func(cmd *cobra.Command, args []string) {
 			run(config)
 		},
@@ -35,7 +35,7 @@ func run(config *util.VultrBGone) {
 	listOptions := &govultr.ListOptions{PerPage: 100}
 	wg := sync.WaitGroup{}
 	for {
-		i, meta, err := config.Config.FirewallGroup.List(context.Background(), listOptions)
+		i, meta, err := config.Config.Snapshot.List(context.Background(), listOptions)
 		if err != nil {
 			_ = fmt.Errorf("error retrieving list %s", err.Error())
 			return
@@ -43,13 +43,13 @@ func run(config *util.VultrBGone) {
 		wg.Add(len(i))
 
 		for _, v := range i {
-			go func(v govultr.FirewallGroup) {
-				if err := config.Config.FirewallGroup.Delete(context.Background(), v.ID); err != nil {
+			go func(v govultr.Snapshot) {
+				if err := config.Config.Snapshot.Delete(context.Background(), v.ID); err != nil {
 					fmt.Println("error : ", err.Error())
 					defer wg.Done()
 					return
 				}
-				fmt.Println("deleted firewall:", v.ID)
+				fmt.Println("deleted snapshot:", v.ID)
 				defer wg.Done()
 				return
 
